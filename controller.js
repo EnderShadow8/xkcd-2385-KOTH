@@ -11,10 +11,10 @@ const bots = [
   }
 ]
 
-function main() {
+function runGame(n=1000) {
   // Previous round's scores, intialised to random numbers
   let prev = bots.map(() => Math.random() * 100)
-  for(let i = 0; i < 1000; i++) {
+  for(let i = 0; i < n; i++) {
     // This round's scores
     let curr = []
 
