@@ -1,5 +1,14 @@
 const bots = [
   // Bots go here
+  {
+    // Example bot:
+    // Assumes all other bots are greedy and choose 100
+    // So he chooses 80
+    name: "Simple", // Just for fun
+    run() {
+      return 80
+    }
+  }
 ]
 
 function main() {
