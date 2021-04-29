@@ -1,6 +1,6 @@
 export function runGame(bots, n=1000) {
   // Total scores
-  let scores = new arr(bots.length).fill(0)
+  let scores = new Array(bots.length).fill(0)
 
   // Previous round's scores, intialised to random numbers
   let prev = bots.map(() => Math.random() * 100)

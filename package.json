@@ -1,0 +1,20 @@
+{
+  "name": "xkcd-2385-koth",
+  "version": "1.0.0",
+  "description": "Submit [here](https://codegolf.stackexchange.com/questions/224621/xkcd-2385-koth-final-exam) on codegolf.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnderShadow8/xkcd-2385-KOTH.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EnderShadow8/xkcd-2385-KOTH/issues"
+  },
+  "homepage": "https://github.com/EnderShadow8/xkcd-2385-KOTH#readme",
+  "type": "module"
+}
