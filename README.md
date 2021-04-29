@@ -59,7 +59,7 @@ Your bot must be an object that has a `run` method that takes an array of number
   // He assumes everyone will choose the same scores as last round
   // So he chooses 80% of the average last round
   name: "LastRounder",
-  own: 100, // Setting properties is allowed
+  own: 0, // Setting properties is allowed
   run(scores) {
     // The average of everyone else's score x 0.8
     this.own = (sum(scores) - this.own) / (scores.length - 1) * 0.8
