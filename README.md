@@ -39,8 +39,6 @@ Your bot must be an object that has a `run` method that takes an array of number
 - Trying to access any other variables outside your bot's own properties is forbidden.
 - [Standard loopholes apply.](https://codegolf.meta.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default)
 
-Controller code can be found [here.](https://github.com/EnderShadow8/xkcd-2385-KOTH)
-
 ## Example bots
 
 ```js
