@@ -19,8 +19,7 @@ export function runGame(bots, n=1000) {
     for(let i = 0; i < bots.length; i++) {
       // Add geometric mean of both scores to total
       scores[i] += Math.sqrt(
-        curr[i],
-        100 - Math.abs(avg * 0.8 - curr[i])
+        curr[i] * 100 - Math.abs(avg * 0.8 - curr[i])
       )
     }
     prev = curr
