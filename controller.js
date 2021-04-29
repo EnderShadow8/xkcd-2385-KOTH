@@ -1,6 +1,6 @@
 export function runGame(bots, n=1000) {
   // Total scores
-  let scores = new Array(bots.length).fill(0)
+  let scores = new arr(bots.length).fill(0)
 
   // Previous round's scores, intialised to random numbers
   let prev = bots.map(() => Math.random() * 100)
@@ -22,7 +22,7 @@ export function runGame(bots, n=1000) {
         curr[i] * 100 - Math.abs(avg * 0.8 - curr[i])
       )
     }
-    prev = curr
+    prev = shuffle(curr)
   }
   return scores
 }
@@ -34,4 +34,23 @@ export function average(arr) {
 
 export function sum(arr) {
   return arr.reduce((a, b) => a + b, 0)
+}
+
+function shuffle(arr) {
+  var currentIndex = arr.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = arr[currentIndex];
+    arr[currentIndex] = arr[randomIndex];
+    arr[randomIndex] = temporaryValue;
+  }
+
+  return arr;
 }
