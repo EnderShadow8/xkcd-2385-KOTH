@@ -27,6 +27,8 @@ The score for each round is added to a total score. The bot with the highest tot
 
 ## Specifications
 
+The challenge in is JS.
+
 Your bot must be an object that has a `run` method that takes an array of numbers as input and returns a number between 1 and 100 inclusive.
 
 ## Other rules
