@@ -1,6 +1,6 @@
-# xkcd-2385-KOTH
+# xkcd 2385 KoTH
 
-Submit here on codegolf.
+Submit [here](https://codegolf.stackexchange.com/questions/224621/xkcd-2385-koth-final-exam) on codegolf.
 
 ![xkcd](https://imgs.xkcd.com/comics/final_exam.png)
 
