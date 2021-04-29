@@ -27,7 +27,7 @@ The score for each round is added to a total score. The bot with the highest tot
 
 ## Specifications
 
-The challenge in is JS.
+The challenge is in JS.
 
 Your bot must be an object that has a `run` method that takes an array of numbers as input and returns a number between 1 and 100 inclusive.
 
@@ -35,9 +35,11 @@ Your bot must be an object that has a `run` method that takes an array of number
 
 - Storing data in your bot's properties is allowed, and encouraged!
 - Using `Math.random` is allowed.
-- Using the helper functions `sum` and `average` are allowed.
-- Trying to access any variables outside your bot's properties is forbidden.
+- Using the helper functions `sum` and `average` is allowed.
+- Trying to access any other variables outside your bot's own properties is forbidden.
 - [Standard loopholes apply.](https://codegolf.meta.stackexchange.com/questions/1061/loopholes-that-are-forbidden-by-default)
+
+Controller code can be found [here.](https://github.com/EnderShadow8/xkcd-2385-KOTH)
 
 ## Example bots
 
@@ -68,6 +70,8 @@ Your bot must be an object that has a `run` method that takes an array of number
 }
 ```
 
-## Submissions are due by 11:59pm UTC on Saturday 8 May, but I might be lenient depending on when I'm next online.
+**Clarification: Both example bots play in the game as well.**
 
-If I haven't posted the results yet, submissions are stil open.
+## Submissions are due by 11:59pm UTC on Saturday 1 May, but I might be lenient depending on when I'm next online.
+
+If I haven't posted the results yet, submissions are still open.
