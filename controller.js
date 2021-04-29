@@ -19,12 +19,30 @@ export function runGame(bots, n=1000) {
     for(let i = 0; i < bots.length; i++) {
       // Add geometric mean of both scores to total
       scores[i] += Math.sqrt(
-        curr[i] * 100 - Math.abs(avg * 0.8 - curr[i])
+        curr[i] * (100 - Math.abs(avg * 0.8 - curr[i]))
       )
     }
+    
+    console.log("Average", " ".repeat(23), avg)
+    for(let i = 0; i < bots.length; i++) {
+      console.log(
+        bots[i].name,
+        " ".repeat(30 - bots[i].name.length),
+        curr[i],
+        Math.sqrt(curr[i] * (100 - Math.abs(avg * 0.8 - curr[i]))),
+        scores[i]
+      )
+    }
+    console.log()
     prev = shuffle(curr)
   }
-  return scores
+  for(let i = 0; i < bots.length; i++) {
+    console.log(
+      bots[i].name,
+      " ".repeat(30 - bots[i].name.length),
+      scores[i]
+    )
+  }
 }
 
 // Helper functions
