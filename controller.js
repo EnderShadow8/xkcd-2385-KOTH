@@ -11,7 +11,7 @@ export function runGame(bots, n=1000) {
 
     // Iterate through all bots' decisions
     for(let bot of bots) {
-      curr.push(bot.run(prev))
+      curr.push(Math.max(0, Math.min(100, bot.run(prev))))
     }
 
     // Calculate scores
