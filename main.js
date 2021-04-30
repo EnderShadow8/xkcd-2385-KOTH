@@ -335,4 +335,4 @@ const bots = [
   }
 ]
 
-runGame(bots, 100, true)
+runGame(bots)
