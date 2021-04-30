@@ -23,7 +23,7 @@ export function runGame(bots, n=1000) {
       )
     }
     
-    console.log("Average", " ".repeat(23), avg)
+    // console.log("Average", " ".repeat(23), avg)
     // for(let i = 0; i < bots.length; i++) {
     //   console.log(
     //     bots[i].name,
@@ -33,7 +33,7 @@ export function runGame(bots, n=1000) {
     //     scores[i]
     //   )
     // }
-    console.log()
+    // console.log()
     prev = shuffle(curr)
   }
   let results = bots.map((i, j) => [i, scores[j]]).sort((a, b) => b[1] - a[1])
