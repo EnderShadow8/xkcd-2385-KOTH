@@ -65,6 +65,273 @@ const bots = [
     run() {
       return 50 + Math.random() * 40
     }
+  },
+  {
+    name: "Sam",
+    flag_first_turn: true,
+    last_own: 100,
+    
+    // Helper function that calculates the score based on the own CS score,
+    // the sum of the other bots' scores, and the number of bots
+    compute_score(cs_score, total_others, n_bots) {
+        return cs_score*(100-Math.abs(cs_score-0.8*(cs_score+total_others)/n_bots))        
+    },
+    
+
+    // Helper function that finds the index of the maximum of an array
+    index_of_max(arr) {
+        var idx_max=0
+        for (var i=1; i<arr.length; i++) {
+            if (arr[i]>arr[idx_max]) idx_max=i
+        }
+        return idx_max
+    },
+        
+        
+    // Main function
+    run(cs_scores) {
+        if (this.flag_first_turn) {
+            this.flag_first_turn=false
+            this.last_own=100
+            return 100;
+        }
+        
+        // Number of bots
+        var n=cs_scores.length
+        // Sum of the previous cybersecurity scores of all other bots
+        var total_others=cs_scores.reduce(function(a,b){return a+b},0)-this.last_own
+            
+            // We find all special points (edge, singular and stationary points) of the function compute_score
+                
+        // One singular point is the point where our output score becomes
+        // equal to 0.8 times the average of all scores (including ours)
+        var out_avg=0.8*total_others/(n-0.8)
+        var score_avg=this.compute_score(out_avg, total_others, n)       
+        
+        // 100 is an extreme point
+        var out_100=100
+        var score_100=this.compute_score(out_100, total_others, n)
+        
+        // If out_up>out_avg, there is a stationary point (derivative 0) at out_up
+        var out_up=Math.min(100, (100*n+0.8*total_others)/(2*n-1.6))
+        var score_up
+        if (out_up<out_avg) {
+            out_up=0   
+            score_up=0
+        } else {
+            score_up=this.compute_score(out_up, total_others, n)
+        }
+        
+        // If out_down<out_avg, there is a stationary point (derivative 0) at out_down
+        var out_down=Math.max(1, (100*n-0.8*total_others)/(2*n-1.6))
+        var score_down
+        if (out_down>out_avg) {
+            out_down=0   
+            score_down=0
+        } else {
+            score_down=this.compute_score(out_down, total_others, n) 
+        }
+        
+        // find maximum score among the special points
+        var extr_outputs=[out_100, out_up, out_avg, out_down]
+        var extr_scores=[score_100, score_up, score_avg, score_down]
+        
+        var idx_max=this.index_of_max(extr_scores)
+        
+        this.last_own=extr_outputs[idx_max]
+        return this.last_own
+    }
+  },
+  {
+    name: "Crb",
+    run() { return 1 }
+  },
+  {
+    name: "MidHighPlusOne",
+    run(scores) {
+        let highScores = scores.filter(s => s >= average(scores) * 0.8).sort((a,b)=>a-b);
+        return Math.min(highScores[Math.floor(highScores.length/2)]+1, 100) || 100
+    }
+  },
+  {
+    name: "FunnyNumber",
+    run() { return 69 }
+  },
+  {
+    // Figure out which bot had the highest combined score last round
+    // Then do what they did
+    name: "FollowTheLeader",
+    firstRound: true,
+    findCombinedScore(cyberScore, avgCyberScore) {
+      const gameTheoryScore = 100 - Math.abs(avgCyberScore * 0.8 - cyberScore)
+      return Math.sqrt(cyberScore * gameTheoryScore);
+    },
+    run(scores) {
+      if (this.firstRound) {
+        this.firstRound = false;
+        return 60;
+      }
+  
+      const avg = average(scores);
+      const combinedScores = scores.map((score) => this.findCombinedScore(score, avg));
+      const combinedWinnerIndex = combinedScores.indexOf(Math.max(...combinedScores));
+      return scores[combinedWinnerIndex]
+    }
+  },
+  {
+    name: "Ans",
+    run() { return 42 }
+  },
+  {
+    name: "Everything so far",
+    moves: [],
+    run(scores){
+      if(scores) {
+        this.moves = this.moves.concat(scores);
+        return this.moves.reduce((a,b)=>a+b)/this.moves.length;
+      } 
+      return 80;
+    }
+  },
+  {
+    name: "Histogrammer",
+    bins: [...Array(101)].map(()=>0),
+    rounds: 0,
+    
+    run(scores) {
+      this.bins[Math.round(average(scores))]++
+      this.rounds++
+      
+      return 50 + this.bins.reduce((t,p,n) => t + p * n, 0) * 2/5 / this.rounds
+    }
+  },
+  {
+    name: "Linear Extrapolator",
+    iteration: 0,
+    average1: 0,
+    average2: 0,
+    minAverage: 0,
+    maxAverage: 0,
+    run(scores) {
+        this.iteration++;
+        if (this.iteration == 1) {
+            return 77;
+        }
+        if (this.iteration == 2) {
+            this.average2 = average(scores);
+            this.minAverage = this.average2;
+            this.maxAverage = this.average2;
+            return 50 + this.average2 * 0.4;
+        }
+        this.average1 = this.average2;
+        this.average2 = average(scores);
+        let extrapolatedAverage = this.average2 + this.average2 - this.average1;
+
+        this.minAverage = Math.min(this.minAverage, this.average2);
+        this.maxAverage = Math.max(this.maxAverage, this.average2);
+        extrapolatedAverage = Math.max(extrapolatedAverage, this.minAverage);
+        extrapolatedAverage = Math.min(extrapolatedAverage, this.maxAverage);
+
+        return 50 + extrapolatedAverage * 0.4;
+    }
+  },
+  {
+    name:"LetsMakeADeal",
+    run() {return 90 + 1}
+  },
+  {
+    name: "Optimise Mean",
+    run(scores) {
+      const avg = scores ? scores.reduce((a,b)=>a+b) / scores.length : 80;
+      return .4*avg+50;
+    }
+  },
+  {
+    name: "Chasing Ninety",
+    myLastGuess: 84,
+    numRounds: 0,
+    run(scores) {
+        this.numRounds++;
+        if (this.numRounds <= 1) {
+            return this.myLastGuess;
+        }
+
+        let avg = average(scores);
+        let difference = this.myLastGuess - (avg * 0.9);
+        let adjustment = difference / Math.log2(this.numRounds);
+        this.myLastGuess = this.myLastGuess - adjustment;
+        return this.myLastGuess;
+    }
+  },
+  {
+    name: "Smartleton",
+    round: 0,
+    run(scores) { return this.round++ ? 80 : 78 }
+  },
+  {
+    name: "90ies",
+    run() {return 90}
+  },
+  {
+    name: "The Thrasher",
+    runcount: 0,
+    run() {
+      this.runcount += 1;
+      return this.runcount % 2 == 0 ? 82 : 0;
+    }
+  },
+  {
+    name : "Squidward",
+    log : [],
+    delta : [],
+    
+    run(scores) {
+      if(scores){
+        let average_score = sum(scores) / scores.length;
+        this.log.push(average_score)
+        if(this.log.length > 1){ 
+          this.delta.push(this.log[this.log.length-1]-this.log[this.log.length - 2])
+          let average_delta = sum(this.delta) / this.delta.length;
+          return (100 + average_score*.8 + average_delta)/2
+        } else if(this.log.length == 1){
+          return (100 + average_score*.8)/2
+        }
+      } else {
+        return 90
+      }
+    }
+  },
+  {
+    name: 'ExponentialMovingAverage',
+    prev: 80,
+    run(scores) { return (scores && scores.length ? average(scores) : 80) * 0.225 + this.prev * 0.775 },
+  },
+  {
+    name: "7-ELEVEn",
+    run() { return 77 }
+  },
+  // {
+  //   name: "LumberJack",
+  //   scoresLog: [],
+  //   run(scores) {
+  //       if(!scores)  {this.scoresLog.push(80);return 80;}
+  //       const avgScore = average(scores);
+  //       this.scoresLog.push(avgScore);
+  //       const avgScoresLog = average(this.scoresLog)
+  //       const top = this.scoresLog.map((score, index) => (score-avgScoresLog)*0.5*index);
+  //       const bottom = this.scoresLog.map(score=> (score-avgScoresLog)**2)
+  //       return Math.max(80, this.scoresLog.length*(sum(top)/sum(bottom)));
+  //   }
+  // },
+  {
+    name: "Elevens",
+    run() { return (Math.floor(Math.random() * (10 - 1) ) + 1) * 11; }
+  },
+  {
+    name: "Near-stable",
+    run: s => {
+      return 50 + 0.4*s.reduce((a, b) => a + b, 0)/s.length;
+    }
   }
 ]
 

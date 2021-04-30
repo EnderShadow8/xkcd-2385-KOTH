@@ -24,23 +24,24 @@ export function runGame(bots, n=1000) {
     }
     
     console.log("Average", " ".repeat(23), avg)
-    for(let i = 0; i < bots.length; i++) {
-      console.log(
-        bots[i].name,
-        " ".repeat(30 - bots[i].name.length),
-        curr[i],
-        Math.sqrt(curr[i] * (100 - Math.abs(avg * 0.8 - curr[i]))),
-        scores[i]
-      )
-    }
+    // for(let i = 0; i < bots.length; i++) {
+    //   console.log(
+    //     bots[i].name,
+    //     " ".repeat(30 - bots[i].name.length),
+    //     curr[i],
+    //     Math.sqrt(curr[i] * (100 - Math.abs(avg * 0.8 - curr[i]))),
+    //     scores[i]
+    //   )
+    // }
     console.log()
     prev = shuffle(curr)
   }
-  for(let i = 0; i < bots.length; i++) {
+  let results = bots.map((i, j) => [i, scores[j]]).sort((a, b) => b[1] - a[1])
+  for(let i of results) {
     console.log(
-      bots[i].name,
-      " ".repeat(30 - bots[i].name.length),
-      scores[i]
+      i[0].name,
+      " ".repeat(30 - i[0].name.length),
+      i[1]
     )
   }
 }
