@@ -11,7 +11,13 @@ export function runGame(bots, n=1000) {
 
     // Iterate through all bots' decisions
     for(let bot of bots) {
-      curr.push(Math.max(0, Math.min(100, bot.run(prev))))
+      let s = Math.max(0, Math.min(100, bot.run(prev)))
+      // Sanitise inputs
+      if(isNaN(s)) {
+        s = 0
+        console.log(bot.name, "picked NaN")
+      }
+      curr.push(s)
     }
 
     // Calculate scores

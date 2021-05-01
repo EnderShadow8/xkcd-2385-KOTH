@@ -332,6 +332,487 @@ const bots = [
     run: s => {
       return 50 + 0.4*s.reduce((a, b) => a + b, 0)/s.length;
     }
+  },
+  {
+    name: "Fourier",
+    sin: [0,0,0,0,0,0],
+    cos: [0,0,0,0,0,0],
+    round: 0,
+    
+    run(scores) {
+      let ave = average(scores)
+      
+      for (let i = 0; i < 6; i++) {
+        this.sin[i] += ave * Math.sin(2*Math.PI * this.round / (i+1))
+        this.cos[i] += ave * Math.cos(2*Math.PI * this.round / (i+1))
+      }
+      
+      this.round++
+      
+      let next = this.sin.reduce((t,a,i) => t + a * Math.sin(2*Math.PI * this.round / (i+1)),0)
+               + this.cos.reduce((t,a,i) => t + a * Math.cos(2*Math.PI * this.round / (i+1)),0)
+      
+      return 50 + 2/5 * Math.max(next,0) / this.round
+    }
+  },
+  {
+    name: "Balanced Strategy",
+    next: 0,
+    run() { return this.next++ % 101 }
+  },
+  {
+    name: "Rude Random",
+    run(scores) {
+      if (!this.score) {
+        this.score = Math.random() > 0.5 ? 1 : 100;
+      }
+      return this.score;
+    }
+  },
+  {
+    name: "Bandwagon",
+    run: (scores) => {
+        let counts = [];
+        for (let radius = 1; Math.max(...counts.slice(50)) * 20 < scores.length; radius++) {
+            for (let i = 50; i <= 80; i++) {
+                counts[i] = +scores.map((x) => Math.abs(x - i) <= radius).reduce((x,y) => x+y);
+            }
+        }
+        return (counts.indexOf(Math.max(...counts.slice(50))) + 1 || 253 / 3) - 1;
+    }
+  },
+  {
+    name: "Rebel",
+    counts: Array(31).fill(0),
+    run(scores) {
+        scores.filter((x) => x <= 80 && x >= 50).forEach((x) => this.counts[x-50]++);
+        return this.counts.lastIndexOf(Math.min(...this.counts)) + 50;
+    }
+  },
+  {
+    name: "Fuzzy Eid",
+    prev: NaN,
+    map: new Array(100).map(()=>new Array(100).fill(0)),
+    scale: (scalar, vec) => vec.map(x=>scalar*x),
+    vec_plus(lhs, rhs) {
+      let result = lhs.slice();
+      for(var index=0; index<result.length; ++index) result[index]+=rhs[index];
+      return result
+    },
+    wts:
+      new Array(100).map((_, index) => 
+        sum(new Array(100).map((_, avg) => 
+          Math.exp(-Math.pow(avg - index,2))
+        ))
+      ),
+    run(scores) {
+      if(isNaN(this.prev)) return 250/3;
+      const avg = Math.round(average(scores)) - 1;
+      ++this.map[prev][avg];
+      this.prev = avg;
+      //prob dist=sum_recordings{e^-(recording - avg)^2*(prob dist inferred from record)}/(sum of e^-(recording - avg)^2)
+      //wts[avg]=sum of e^-(recording - avg)^2
+      const dist = this.scale(1/this.wts[avg], this.map.map((outpts, index) => 
+        this.scale(Math.exp(-Math.pow(avg - index,2)) / sum(outpts), outpts)).reduce(this.vec_plus));
+      return 100 + 0.4*sum(dist.map((p,n)=>p*n))
+    }
+  },
+  (() => {
+    function *stateMachine() {
+        let left = 1;
+        let right = 100;
+        
+        yield 51;
+        
+        let counter = 0;
+        
+        while (true) {
+            counter++;
+        
+            const middle = left + (right - left) / 2;
+            
+            if (counter % 10 === 0) {
+                left = Math.max(1, Math.random() * 100);
+                right = Math.max(1, Math.random() * 100);
+                
+                if (left > right) [left, right] = [right, left];
+            }
+            
+            const scores = yield middle;
+            scores.sort((a, b) => a - b);
+            
+            let countLower = 0;
+            let countHigher = 0;
+            
+            for (const score of scores) if (score < middle) countLower++;
+            for (const score of scores) if (score > middle) countHigher++;
+            
+            if (countLower > countHigher) {
+                right = middle;
+            } else {
+                left = middle;
+            }
+        }
+    };
+    
+    const iterator = stateMachine();
+    let score = iterator.next().value;
+
+    return {
+        name: "USACO (Unofficial)",
+        run: scores => {
+            const oldScore = score;
+            score = iterator.next(scores).value;
+            return oldScore;
+        }
+    };
+  })(),
+  {
+    name: "AverageAverage",
+    avgLog: [],
+    isFirstRound: true,
+    gmean(a, b) {
+      return Math.sqrt(a * b);
+    },
+    scoreForAvg(avg) {
+      let delta = 100;
+      let score = 100;
+      let newScore = 0;
+      while (delta > 0.05) {
+        newScore = this.gmean(score, 100 - Math.abs((avg * 0.8) - score));
+        delta = Math.abs(score - newScore);
+        score = newScore;
+      }
+      return score;
+    },
+    run(scores) {
+      if (this.isFirstRound) {
+        this.isFirstRound = false;
+        return 73;
+      }
+      this.avgLog.push(average(scores));
+      let avgavg = average(this.avgLog);
+      return this.scoreForAvg(avgavg);
+    }
+  },
+  {
+    name: "getRandomNumber",
+    run() {
+        return 4 // chosen by fair dice roll.
+                 // guaranteed to be random.
+    }
+  },
+  // {
+  //   name: "iDontWannaFail",
+  //   run: (scores) => {
+  //       let sum = scores.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
+  //       let avg = (sum / scores.length) || 0;
+  //       let output = avg * 0.8 + Math.round(Math.random()*11)-5;
+  //       if (avg > 60) {
+  //           if (output < 70) {
+  //               output = Math.floor(Math.random * 30) + 70;
+  //           }
+  //       }
+  //       else {
+  //           if (avg > 25) {
+  //               output = Math.round(Math.random * avg / 1.5) + avg; // Worst case is 49.
+  //           }
+  //           else {
+  //               output = Math.round(3.75 * avg); // Decent results unless avg is very low
+  //           }
+  //       }
+  //       if (output > 100) {
+  //           output = 100;
+  //       }
+  //       return output;
+  //   }
+  // },
+  {
+    name: "Greedy",
+    run(scores){
+      var max_index = (arr => arr.indexOf(Math.max.apply(Math, arr)));
+      var point = (avg) => {
+        return (s) => Math.sqrt(s*(100-Math.abs(0.8*avg-s)))
+      }
+      var goal = (scores) => {
+        return (mine) => {
+          var avg = average(scores.concat([mine]));
+          return point(avg)(mine) - Math.max(...scores.map((v,i)=>point(avg)(v)));
+        }
+      } 
+  
+      var avg = average(scores);
+      var range = Array(101).fill().map((_,i)=>i);
+      return range[max_index(range.map((v,i) => goal(scores)(v)))];
+    }
+  },
+  {
+    name: "Chain estimator",
+    bin_n: 25,
+    history_len: 2,
+    avg_history: null,
+    table: {},
+    run(scores) {
+      var weighted_mean = (values, weights) => {
+        const result = values
+          .map((value, i) => {
+            const weight = weights[i]
+            const sum = value * weight
+            return [sum, weight]
+          })
+          .reduce((p, c) => [p[0] + c[0], p[1] + c[1]], [0, 0])
+      
+        return result[0] / result[1]
+      };
+      
+      var avg = average(scores);
+      var bin_n = this.bin_n;
+      var bin_w = 100/bin_n;
+  
+      if(this.avg_history === null){
+        this.avg_history = Array(this.history_len).fill();
+      }
+  
+      if(this.avg_history[0] === null){
+        var out = 50 + 0.4*avg;
+  
+        // updates history
+        this.avg_history = this.avg_history.slice(1).concat([avg])
+  
+        return Math.min(Math.max(Math.round(out),1),100);
+      }else{
+        // gets the "bins"
+        var bin = (v => Math.max(Math.ceil(v/bin_w)-1, 0));
+        var bins = this.avg_history.map(bin);
+        var bin_cur = bin(avg);
+  
+        // updates the table
+        for (state in this.table) {
+          this.table[state] = this.table[state].map((v,i)=>v*0.95);
+        }
+        if(!(bins in this.table)){
+          this.table[bins] = Array(bin_n).fill(1);
+        }
+        this.table[bins][bin_cur] += 1;
+        
+        // estimates the avg
+        var state = bins.slice(1).concat([bin_cur]);
+        var mids = Array(bin_n).fill().map((_,i) => (i+.5)*bin_w);
+        if(!(state in this.table)){
+          this.table[state] = Array(bin_n).fill(.1);
+        }
+        var avg_est = weighted_mean(mids, this.table[state].map((v,i)=>Math.pow(v,5)));
+        var out = 50 + 0.4*avg;
+  
+        // updates history
+        this.avg_history = this.avg_history.slice(1).concat([avg])
+  
+        return Math.min(Math.max(Math.round(out),1),100);
+      }
+    }
+  },
+  {
+    name: "That mean average Joe",
+    Joe: [],
+    run( scores ) {
+      this.Joe.push(average(scores)); // like.no.one(ever(did));
+      return average(this.Joe)*1.1111111111111111;
+    }
+  },
+  {
+    name: "LuckyDiceKid",
+    run(_scores) {
+      let total = 0;
+      let values = [];
+      for (let i = 0; i < 7; i++) {
+        let curr = Math.floor(Math.random() * 20) + 1;
+        values.push(curr);
+        total += curr;
+      }
+      values.sort((x, y) => (x - y));
+      total -= (values[0] + values[1]);
+      return total;
+    }
+  },
+  {
+    name: "Rick",
+    seed: `We're no strangers to love
+You know the rules and so do I
+A full commitment's what I'm thinking of
+You wouldn't get this from any\``,
+    position: -1,
+
+    run() { 
+      // increment position until a letter is found
+      do {
+        this.position++;
+
+        if (this.position >= this.seed.length){
+          // reset position back to the start
+          this.position = 0;
+        }
+      } while (this.seed[this.position] < 'A' || this.seed[this.position] > 'z');
+
+      // convert to uppercase because most lowercase letters have charcodes greater than 100
+      return this.position && this.seed[this.position].toUpperCase().charCodeAt();
+    }
+  },
+  {
+    name: "IQbot_0.4 the terasentient xd",
+    histogram_bins: [...Array(101)].map(()=>0),
+    mark: null,
+    linear_history: [],
+    last_choice: 0,
+    n_rounds: 0,
+    last_SCA: 0,
+    mark_weight: 20,
+    mark_prediction: 0,
+    linear_weight: 20,
+    linear_prediction: 0,
+    copycat_weight: 0,
+    copycat_prediction: 0,
+    run(scores) {
+        this.n_rounds++;
+        scores = scores.filter((x)=> 100 >= x && x > 0);
+        let n_bots = scores.length;
+        let c = 1 - 0.4/n_bots
+        for (let i = 0; i < n_bots; i++) {
+            this.histogram_bins[Math.round(scores[i])]++;
+        }
+        //THE SIMP DETECTOR
+        let simps = [];
+        for (let i = 0; i < 101; i++) {
+            if (this.histogram_bins[i] > this.n_rounds) {
+                simps.push(i);
+            }
+        }
+
+        //Idk this shouldn't happen but I'm not risking anything
+        while (scores.length - simps.length - 1 <= 0) simps.pop();
+
+        if (this.n_rounds == 1) {
+            this.mark = Array(201);
+            for (let i = 0; i < 201; i++) {
+                this.mark[i] = Array(201);
+                for (let j = 0; j < 201; j++) {
+                    this.mark[i][j] = 0;
+                }
+            }
+            for (let i = 0; i < 201; i++) {
+                this.mark[i][i]++;
+            }
+        }
+
+        let simp_corrected_avg = (sum(scores) - this.last_choice - sum(simps)) / (scores.length - 1 - simps.length);
+        let quantized_avg = Math.round(2*simp_corrected_avg);
+        this.mark[Math.round(2*this.last_SCA)][quantized_avg]++;
+        this.last_SCA = simp_corrected_avg;
+
+        if (this.n_rounds == 1) {
+            this.last_choice = 77;
+            return 77;
+        }
+        
+        this.linear_history.push(simp_corrected_avg);
+
+        // Update weights based on who was right
+        let linear_error  = Math.exp(-Math.abs(this.linear_prediction  - simp_corrected_avg));
+        let mark_error    = Math.exp(-Math.abs(this.mark_prediction    - simp_corrected_avg));
+        let copycat_error = Math.exp(-Math.abs(this.copycat_prediction - simp_corrected_avg));
+        let total_errors = linear_error + mark_error + copycat_error;
+        this.linear_weight += linear_error / total_errors;
+        this.mark_weight += mark_error / total_errors;
+        this.copycat_weight += copycat_error / total_errors;
+
+        this.linear_weight  *= 0.99;
+        this.mark_weight    *= 0.99;
+        this.copycat_weight *= 0.99;
+        
+        // Compute a markov chain prediction
+        let x_half_filter = 8;
+        let y_half_filter = 1;
+        
+        let probability_sum = 0;
+        let probability_moment = 0;
+
+        for (let option = 1; option < 201; option++) {
+            for (let x = -x_half_filter; x <= x_half_filter; x++) {
+                for (let y = -y_half_filter; y <= y_half_filter; y++) {
+                    let X = Math.max(Math.min(quantized_avg + x, 200), 0);
+                    let Y = Math.max(Math.min(option + y, 200), 0);
+                    let probability = this.mark[X][Y] * (Math.pow(2, -(X-quantized_avg)*(X-quantized_avg)-(Y-option)*(Y-option)));
+                    probability_sum += probability;
+                    probability_moment += option / 2 * probability;
+                }
+            }
+        }
+
+        this.mark_prediction = probability_moment / probability_sum;
+        
+        for (let i = 0; i < 201; i++) {
+            for (let j = 0; j < 201; j++) {
+                this.mark[i][j] *= 0.999
+            }
+        }
+
+        // Compute a linear regression
+        if (this.linear_history.length > 3) {
+            if (this.linear_history.length > 10) {
+                this.linear_history.shift();
+            }
+            let x_avg = (this.linear_history.length - 1) / 2
+            let y_avg = average(this.linear_history);
+            let S_xx = 0;
+            let S_xy = 0;
+            for (let x = 0; x < this.linear_history.length; x++) {
+                S_xx += (x - x_avg) ** 2;
+                S_xy += (x - x_avg) * (this.linear_history[x] - y_avg);
+            }
+            let b = S_xy / S_xx
+            let a = y_avg - b * x_avg;
+            this.linear_prediction = a + b / this.linear_history.length;
+        } else {
+            this.linear_prediction = simp_corrected_avg;
+        }
+
+        // Compute what everyone else does
+        let counts = [];
+        for (let radius = 1; Math.max(counts) < 0.05 * scores.length; radius++) {
+            for (let i = 50; i <= 90; i++) {
+                counts[i] = 0;
+                for (let j = 0; j < n_bots; j++) if (Math.abs(scores[j] - i) <= radius) counts[i]++;
+            }
+        }
+        this.copycat_prediction = (counts.indexOf(Math.max(counts.slice(50))) * c - 50) / 0.4 * n_bots/(n_bots-1);
+
+        let expected_unsimp_average = (
+            this.mark_prediction * this.mark_weight + 
+            this.linear_prediction * this.linear_weight + 
+            this.copycat_prediction * this.copycat_weight
+        ) / (this.mark_weight + this.linear_weight + this.copycat_weight);
+
+        let expected_average = (expected_unsimp_average * (n_bots - 1 - simps.length) + sum(simps)) / (n_bots - 1);
+
+        // We don't want to give out bad values, now do we
+        this.last_choice = Math.max(1, Math.min(100, (50 + 0.4 * expected_average * (n_bots-1)/n_bots)/c));
+        return this.last_choice;
+    }
+  },
+  {
+    name: "WouldaShoulda",
+    ownLast: 0,
+    isFirst: true,
+    run(scores) {
+      if (this.isFirst) {
+        this.isFirst = false
+        this.ownLast = 80
+      } else {
+        let count = scores.length
+        let otherAvg = (sum(scores) - this.ownLast) / (count - 1)
+        this.ownLast = (80 * count + otherAvg * count - otherAvg) / (2 * count - 1)
+      }
+      return this.ownLast
+    }
   }
 ]
 
