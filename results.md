@@ -1,5 +1,73 @@
 # Results
 
+## Total
+```
+offset prediction               782817.0704513083
+The Fat                         782815.7946355275
+The Skinny                      782812.7509394622
+LastMinute HistoryAnalyzer      782807.6953010578
+xXx_Markov_143_xXx              782804.1163519053
+Overshoot (slightly)            782796.7514902483
+AverageAverage                  782796.4139823143
+Histogrammer                    782791.3104009391
+Bandwagon                       782784.1253602304
+Golden                          782776.9996256648
+IQbot_0.4 the terasentient xd   782769.1208213882
+ExponentialMovingAverage        782761.8780519881
+NaiveMeta                       782740.5134702881
+Optimise Mean                   782736.0355834992
+Near-stable                     782736.0355834992
+Calculus                        782735.77666581
+Greedy                          782732.2160788049
+Chain estimator                 782731.4415392039
+Squidward                       782730.1767072226
+AverageAverageAverage           782722.3921382297
+FollowTheLeader                 782722.3827401971
+That mean average Joe           782717.6192395596
+MidHighPlusOne                  782706.9861917241
+7-ELEVEn                        782688.8150022576
+LumberJack                      782680.1468839413
+Sam                             782678.8895804551
+Smartleton                      782603.6500500035
+Simpleton                       782602.825708689
+Linear Extrapolator             782558.1510060542
+Fourier                         782457.8384526835
+Equilibrium                     782362.03005122
+WouldaShoulda                   782164.3182505863
+SimpleCalculus                  781156.900827788
+Fuzzy Eid                       781156.900827788
+Everything so far               778764.5345493797
+FunnyNumber                     777276.8273355942
+iDontWannaFail                  775422.6120287444
+90ies                           773961.054782416
+LetsMakeADeal                   772379.6210725816
+Rick                            772278.8953049494
+Chasing Ninety                  768935.7469230485
+Random_50_90                    766008.705952865
+Max                             752041.4562479982
+Game Theory is stupid anyway    752036.012726096
+LuckyDiceKid                    748698.0877766277
+LastRounder                     744648.6735818496
+Rebel                           742792.3495804867
+USACO (Unofficial)              740008.5264720902
+Copycat                         715615.0336566978
+Rude Random                     684670.2784119362
+SimpleWeighted                  665670.0247801909
+Elevens                         621833.0849568358
+Ans                             598996.5176964153
+Balanced Strategy               581273.3645905151
+40                              577676.9354212452
+Grumpy Chaotic                  413410.15601153474
+The Thrasher                    393835.50379331235
+getRandomNumber                 137728.15399763573
+Crb                             66649.69700608414
+The Root of the Problem         558.4299162811329
+```
+
+Congratulations ***offset prediction*** for winning the game! (I was rooting for *Rick*)
+
+A breakdown is shown below.
+
 Programmers should count from 0
 
 ## Round 0
@@ -641,72 +709,6 @@ getRandomNumber                 13752.590654015641
 Crb                             6654.5257100385115
 The Root of the Problem         50.96509787940253
 ```
-
-## Total
-```
-offset prediction               782817.0704513083
-The Fat                         782815.7946355275
-The Skinny                      782812.7509394622
-LastMinute HistoryAnalyzer      782807.6953010578
-xXx_Markov_143_xXx              782804.1163519053
-Overshoot (slightly)            782796.7514902483
-AverageAverage                  782796.4139823143
-Histogrammer                    782791.3104009391
-Bandwagon                       782784.1253602304
-Golden                          782776.9996256648
-IQbot_0.4 the terasentient xd   782769.1208213882
-ExponentialMovingAverage        782761.8780519881
-NaiveMeta                       782740.5134702881
-Optimise Mean                   782736.0355834992
-Near-stable                     782736.0355834992
-Calculus                        782735.77666581
-Greedy                          782732.2160788049
-Chain estimator                 782731.4415392039
-Squidward                       782730.1767072226
-AverageAverageAverage           782722.3921382297
-FollowTheLeader                 782722.3827401971
-That mean average Joe           782717.6192395596
-MidHighPlusOne                  782706.9861917241
-7-ELEVEn                        782688.8150022576
-LumberJack                      782680.1468839413
-Sam                             782678.8895804551
-Smartleton                      782603.6500500035
-Simpleton                       782602.825708689
-Linear Extrapolator             782558.1510060542
-Fourier                         782457.8384526835
-Equilibrium                     782362.03005122
-WouldaShoulda                   782164.3182505863
-SimpleCalculus                  781156.900827788
-Fuzzy Eid                       781156.900827788
-Everything so far               778764.5345493797
-FunnyNumber                     777276.8273355942
-iDontWannaFail                  775422.6120287444
-90ies                           773961.054782416
-LetsMakeADeal                   772379.6210725816
-Rick                            772278.8953049494
-Chasing Ninety                  768935.7469230485
-Random_50_90                    766008.705952865
-Max                             752041.4562479982
-Game Theory is stupid anyway    752036.012726096
-LuckyDiceKid                    748698.0877766277
-LastRounder                     744648.6735818496
-Rebel                           742792.3495804867
-USACO (Unofficial)              740008.5264720902
-Copycat                         715615.0336566978
-Rude Random                     684670.2784119362
-SimpleWeighted                  665670.0247801909
-Elevens                         621833.0849568358
-Ans                             598996.5176964153
-Balanced Strategy               581273.3645905151
-40                              577676.9354212452
-Grumpy Chaotic                  413410.15601153474
-The Thrasher                    393835.50379331235
-getRandomNumber                 137728.15399763573
-Crb                             66649.69700608414
-The Root of the Problem         558.4299162811329
-```
-
-Congratulations ***offset prediction*** for winning the game! (I was rooting for Rick)
 
 ## Disqualified (broken or unfinished)
 ```
