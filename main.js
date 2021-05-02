@@ -1303,7 +1303,7 @@ You wouldn't get this from any\``,
 ]
 
 let total = bots.map(() => 0)
-for(let i = 0; i < 4; i++) {
+for(let i = 0; i < 10; i++) {
   let tbots = clone(bots)
   const g = runGame(tbots)
   total = total.map((i, j) => i + g[j])
@@ -1325,8 +1325,7 @@ function clone(obj) {
 
   if (obj instanceof Date) {
     var temp = new obj.constructor()
-  } //or new Date(obj);
-  else {
+  } else {
     var temp = obj.constructor()
   }
 
