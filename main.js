@@ -50,17 +50,17 @@ const bots = [
     name: "Game Theory is stupid anyway",
     run: _ => 100
   },
-  // {
-  //   name: "SimpleWeighted",
-  //   weights: (E => {
-  //     let csum = [...Array(101).keys()].map((s=>n=> s+=Math.sqrt(x*(100-Math.abs(4/5*E-x))))(0))
-  //     return csum.map(x => 1 - x / csum[100])
-  //   })(58.863975225),
-  //   run() {
-  //     let rand = Math.random()
-  //     return 1+this.weights.findIndex(w => rand >= w)
-  //   }
-  // },
+  {
+    name: "SimpleWeighted",
+    weights: (E => {
+      let csum = [...Array(101).keys()].map((s=>n=> s+=Math.sqrt(n*(100-Math.abs(4/5*E-n))))(0))
+      return csum.map(x => 1 - x / csum[100])
+    })(58.863975225),
+    run() {
+      let rand = Math.random()
+      return 1+this.weights.findIndex(w => rand >= w)
+    }
+  },
   {
     name: "Random_50_90",
     run() {
@@ -1172,6 +1172,7 @@ You wouldn't get this from any\``,
   // {
   //   name: "Goethmetic Meandian",
   //   run: scores => {
+  //     scores.filter((x) => x > 0)
   //     let a = new Float64Array(scores)
   //     do {
   //       a.sort()
@@ -1180,7 +1181,7 @@ You wouldn't get this from any\``,
   //         Math.pow(a.reduce((x, y) => x * y, 1), 1 / a.length),
   //         a.length % 2 ? a[Math.floor(a.length / 2)] : (a[Math.floor(a.length / 2)] + a[Math.ceil(a.length / 2)]) / 2,
   //       ]
-  //     } while (a[0] !== a[1] && a[1] !== a[2])
+  //     } while (Math.abs(a[0] - a[1]) > 0.01 || Math.abs(a[1] - a[2]) > 0.01)
   //     return Math.min(100, Math.max(1, Math.round(a[0])))
   //   },
   // },
@@ -1306,6 +1307,8 @@ let total = bots.map(() => 0)
 for(let i = 0; i < 10; i++) {
   let tbots = clone(bots)
   const g = runGame(tbots)
+  console.log("Round", i)
+  console.log()
   total = total.map((i, j) => i + g[j])
 }
 

@@ -6,9 +6,6 @@ export function runGame(bots, n=1000) {
   let prev = bots.map(() => Math.random() * 100)
 
   for(let i = 0; i < n; i++) {
-    if(i % 20 === 0) {
-      console.log(i)
-    }
 
     // This round's scores
     let curr = []
