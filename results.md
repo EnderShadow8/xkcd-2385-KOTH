@@ -706,6 +706,8 @@ Crb                             66649.69700608414
 The Root of the Problem         558.4299162811329
 ```
 
+Congratulations ***offset prediction*** for winning the game! (I was rooting for Rick)
+
 ## Disqualified (broken or unfinished)
 ```
 Chessmaster
