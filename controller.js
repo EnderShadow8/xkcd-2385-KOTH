@@ -6,6 +6,10 @@ export function runGame(bots, n=1000) {
   let prev = bots.map(() => Math.random() * 100)
 
   for(let i = 0; i < n; i++) {
+    if(i % 20 === 0) {
+      console.log(i)
+    }
+
     // This round's scores
     let curr = []
 
@@ -28,7 +32,7 @@ export function runGame(bots, n=1000) {
         curr[i] * (100 - Math.abs(avg * 0.8 - curr[i]))
       )
     }
-    
+
     // console.log("Average", " ".repeat(23), avg)
     // for(let i = 0; i < bots.length; i++) {
     //   console.log(
@@ -50,6 +54,7 @@ export function runGame(bots, n=1000) {
       i[1]
     )
   }
+  return scores
 }
 
 // Helper functions
