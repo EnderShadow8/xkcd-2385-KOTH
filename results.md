@@ -705,3 +705,10 @@ getRandomNumber                 137728.15399763573
 Crb                             66649.69700608414
 The Root of the Problem         558.4299162811329
 ```
+
+## Disqualified (broken or unfinished)
+```
+Chessmaster
+Geothmetic meandian
+Impatience
+```
